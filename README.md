@@ -1,4 +1,4 @@
-API de Ropa
+Tp_Especial 3
 Esta es la documentación para usar la API de la tienda de ropa. La base de datos es la misma que la del trabajo anterior.
 
 Endpoints
