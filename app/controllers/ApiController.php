@@ -17,35 +17,9 @@ class ApiController {
         return json_decode($this->data);
     }
 
-    public function handleRopa($params) {
-        $method = $_SERVER['REQUEST_METHOD'];
-        $id = isset($params[1]) && is_numeric($params[1]) ? $params[1] : null;
-
-        switch ($method) {
-            case 'GET':
-                if ($id) {
-                    $this->getRopa($id);
-                } else {
-                    $this->getAllRopa();
-                }
-                break;
-            case 'POST':
-                $this->addRopa();
-                break;
-            case 'PUT':
-                if ($id) {
-                    $this->updateRopa($id);
-                } else {
-                    $this->view->response("Debe especificar un ID para modificar.", 400);
-                }
-                break;
-            default:
-                $this->view->response("Método no permitido", 405);
-                break;
-        }
-    }
-
-    public function getRopa($id) {
+  
+    public function getRopa($params) {
+        $id = $params[':ID'];
         $prenda = $this->model->getRopaById($id);
 
         if ($prenda) {
@@ -56,8 +30,9 @@ class ApiController {
     }
 
     public function getAllRopa() {
-        $sort = $_GET['sort'] ?? 'ropa_id';
-        $order = $_GET['order'] ?? 'ASC';
+        $sort = $_GET["sort"]?? 'ropa_id';
+        $order = $_GET["order"]?? 'ASC';
+      
 
         $ropas = $this->model->getRopa($sort, $order);
         return $this->view->response($ropas, 200);
@@ -80,7 +55,8 @@ class ApiController {
         }
     }
 
-    public function updateRopa($id) {
+    public function updateRopa($params) {
+        $id = $params[':ID'];
         $prendaExiste = $this->model->getRopaById($id);
         if (!$prendaExiste) {
             return $this->view->response("La prenda con el ID $id no existe.", 404);
